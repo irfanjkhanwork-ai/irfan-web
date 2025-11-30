@@ -1,84 +1,93 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Irfan — Essays & Papers</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Irfan Khan — Portal</title>
+
+  <!-- modest, system fonts for the portal look -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar" role="navigation" aria-label="Main navigation">
-      <a class="site-title" href="index.html">Irfan Khan</a>
-
-      <div class="nav-section">
-        <h4>PORTAL</h4>
-        <a href="index.html">Home</a>
-        <a href="#essays">Essays</a>
-        <a href="#papers">Papers</a>
-        <a href="about.html">About</a>
+  <div class="site">
+    <header class="topbar">
+      <div class="top-inner">
+        <a class="brand" href="#">Irfan Khan : Portal</a>
+        <form class="search" action="#" method="get">
+          <input name="q" placeholder="Search" />
+          <button>🔎</button>
+        </form>
       </div>
+    </header>
 
-      <div class="nav-section">
-        <h4>ESSAYS</h4>
-        <a href="essays/essay-sample.html">Modernity and Power</a>
-        <a href="essays/essay-sample.html#">Political Psychology</a>
-        <a href="essays/essay-sample.html#">AI & Society</a>
-      </div>
+    <main class="layout">
+      <aside class="left-col">
+        <section class="box green">
+          <h3>Contents</h3>
+          <nav>
+            <ul class="dense">
+              <li><a href="#">Who is Irfan Khan?</a></li>
+              <li><a href="#">Essays (index)</a></li>
+              <li><a href="#">Papers (PDF)</a></li>
+              <li><a href="#">AI & Society</a></li>
+              <li><a href="#">Political Psychology</a></li>
+              <li><a href="#">Modernity and Power</a></li>
+              <li><a href="#">About this project</a></li>
+            </ul>
+          </nav>
+        </section>
 
-      <div class="nav-section">
-        <h4>PAPERS (PDF)</h4>
-        <a href="papers/sample-paper.pdf" target="_blank">Sample Paper (PDF)</a>
-      </div>
+        <section class="box">
+          <h4>Quick Links</h4>
+          <ul class="dense">
+            <li><a href="#">Russell archive</a></li>
+            <li><a href="#">Translations</a></li>
+            <li><a href="#">Collected quotes</a></li>
+            <li><a href="#">Donate</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </section>
+      </aside>
 
-      <div class="nav-section">
-        <h4>ABOUT</h4>
-        <a href="about.html">About this Project</a>
-      </div>
+      <article class="main-col">
+        <section class="hero box teal">
+          <h1>Essays & Papers — Portal</h1>
+          <p class="muted">A curated collection of essays, notes and research papers on politics, psychology and intellectual history.</p>
+        </section>
 
-      <div style="margin-top:14px;color:#666;font-size:13px">Updated: <span id="updated">Nov 30, 2025</span></div>
-    </aside>
-
-    <main class="main" role="main">
-      <section class="hero">
-        <h1>Essays & Papers — Portal</h1>
-        <p class="lead">A curated collection of essays and research papers on philosophy, political theory, psychology, and economics. Browse, read inline, or download PDFs.</p>
-      </section>
-
-      <section id="essays" style="margin-top:18px">
-        <h2>Latest Essays</h2>
-        <div class="list-grid">
-          <article class="card">
-            <h3><a href="essays/essay-sample.html">Modernity and Power</a></h3>
-            <p class="muted">An essay on political structures and modern institutions — short excerpt goes here.</p>
+        <section class="box">
+          <h2>Latest Essays</h2>
+          <article class="entry">
+            <h3><a href="#">Modernity and Power</a></h3>
+            <p class="excerpt">An essay on institutional power and political forms — short excerpt here.</p>
           </article>
 
-          <article class="card">
+          <article class="entry">
             <h3><a href="#">Political Psychology</a></h3>
-            <p class="muted">Notes and essays on shame, guilt, and political behavior.</p>
+            <p class="excerpt">Notes and essays on shame, guilt and political behaviour.</p>
           </article>
-        </div>
-      </section>
+        </section>
 
-      <section id="papers" style="margin-top:18px">
-        <h2>Featured Papers</h2>
-        <div class="list-grid">
-          <article class="card">
-            <h3>Sample Paper (PDF)</h3>
-            <p class="muted">A sample research paper. Download to read full text.</p>
-            <a class="file-link" href="papers/sample-paper.pdf" target="_blank">Download PDF</a>
-          </article>
+        <section class="box paper-list">
+          <h2>Featured Papers (PDF)</h2>
+          <ul class="dense">
+            <li><a href="#">Sample Paper (PDF)</a> — <small>download</small></li>
+            <li><a href="#">Another Paper (PDF)</a></li>
+            <li><a href="#">Working note: AI & Morality</a></li>
+          </ul>
+        </section>
 
-          <article class="card">
-            <h3>Another Paper</h3>
-            <p class="muted">Abstract or note for the second featured paper.</p>
-          </article>
-        </div>
-      </section>
-
+        <section class="box small-ad">
+          <div class="ad">[ Ad placeholder ]</div>
+        </section>
+      </article>
     </main>
-  </div>
 
-  <footer>© Irfan Khan — Essays & Papers</footer>
+    <footer class="foot">
+      <div class="foot-inner">
+        <small>Updated: Nov 30, 2025 — minimalist portal style inspired by older academic sites.</small>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
