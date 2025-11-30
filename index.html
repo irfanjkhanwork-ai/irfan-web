@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Irfan Portal — Essays (embedded / external)</title>
+  <title>Irfan Portal — Essays (external)</title>
   <style>
     :root{--bg:#f7f4e0;--teal:#78cbb3;--card:#fff;--muted:#666;--link:#0b5ed7;--maxw:1100px}
     *{box-sizing:border-box}
@@ -34,13 +34,13 @@
   </style>
 </head>
 <body>
-  <header>Irfan Portal — Essays (embedded / external) <span style="float:right;font-weight:400;font-size:0.95rem;opacity:.95">Last updated: <span id="lastUpdated">2025-11-30</span></span></header>
+  <header>Irfan Portal — Essays (external) <span style="float:right;font-weight:400;font-size:0.95rem;opacity:.95">Last updated: <span id="lastUpdated">2025-11-30</span></span></header>
 
   <div class="wrap" role="main">
     <nav class="sidebar" aria-label="Main navigation">
       <h3>Contents</h3>
       <ul id="sidebarList">
-        <!-- Filled dynamically from essays/index.json or fallback list -->
+        <!-- Populated from essays/index.json -->
       </ul>
 
       <hr/>
@@ -67,8 +67,9 @@
       <section id="listArea" class="card" aria-live="polite">
         <div style="font-weight:700;margin-bottom:8px">Essays & items (click title to preview or click "Open full" to read inline)</div>
         <ol id="items">
-          <!-- Populated dynamically -->
+          <!-- Only populated from essays/index.json; nothing pre-embedded here -->
         </ol>
+        <div id="noEssaysMessage" class="meta hidden">No essays found. Place essay files in <code>essays/</code> and add an <code>essays/index.json</code> with metadata.</div>
       </section>
 
       <aside id="preview" class="card" aria-live="polite">
@@ -79,7 +80,7 @@
 
         <div id="previewInner" style="margin-top:10px">
           <h2>Select an essay to see details</h2>
-          <div class="meta">Click a title to preview; click <em>Open full</em> to read the external/embedded HTML.</div>
+          <div class="meta">Click a title to preview; click <em>Open full</em> to read the external HTML file.</div>
         </div>
       </aside>
 
@@ -112,34 +113,25 @@
     </div>
   </div>
 
-  <footer>Keep essays in an <code>essays/</code> folder and update <code>essays/index.json</code> — see instructions below.</footer>
+  <footer>Keep essays in an <code>essays/</code> folder and maintain <code>essays/index.json</code>.</footer>
 
 <script>
-/* CONFIG: path to essays folder and index file */
-const ESSAYS_INDEX = 'essays/index.json'; // editable if you place index elsewhere
-const ESSAYS_DIR = 'essays/'; // folder where essays are stored
+/* CONFIG */
+const ESSAYS_INDEX = 'essays/index.json';
+const ESSAYS_DIR = 'essays/';
+const STORAGE_KEY = 'irfan_portal_favs_v1';
 
-/* UI elements */
+/* UI refs */
 const sidebarList = document.getElementById('sidebarList');
 const itemsOl = document.getElementById('items');
 const previewInner = document.getElementById('previewInner');
 const fullView = document.getElementById('fullView');
 const fullInner = document.getElementById('fullInner');
 const favPreviewBtn = document.getElementById('favPreviewBtn');
-const showFavLink = document.getElementById('showFavLink');
-const STORAGE_KEY = 'irfan_portal_favs_v1';
+const noEssaysMessage = document.getElementById('noEssaysMessage');
 let favorites = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
-/* default fallback data (used when index.json not present) */
-const FALLBACK_LIST = [
-  { id:'e1', title:'Stalin: A Historical and Dialectical Necessity Undone by Khrushchev', author:'Irfan', date:'2024-01-01', filename:'stalin.html', category:'essay', annotation:'theoretical, historical, dialectical analysis.' },
-  { id:'e2', title:'An Enquiry Concerning Israel, Liberal Democracy and Karl Marx', author:'Irfan', date:'2024-01-02', filename:'israel-marx.html', category:'essay', annotation:'geopolitical critique, democracy & ideology.' },
-  { id:'e3', title:'On China', author:'Irfan', date:'2024-01-03', filename:'on-china.html', category:'essay', annotation:'strategic, historical, and political study.' },
-  { id:'e4', title:'Ecological Motion of Capitalism', author:'Irfan', date:'2024-01-04', filename:'ecological-capitalism.html', category:'essay', annotation:'ecological critique of capitalist dynamics.' },
-  { id:'e5', title:'The Illiberal Nature of Democracy', author:'Irfan', date:'2024-01-05', filename:'illiberal-democracy.html', category:'essay', annotation:'political theory, contradictions of democracy.' }
-];
-
-/* Utility: safe fetch JSON */
+/* fetch helper */
 async function fetchJson(url){
   try {
     const res = await fetch(url, {cache:'no-store'});
@@ -150,20 +142,25 @@ async function fetchJson(url){
   }
 }
 
-/* Load index.json if available; otherwise use fallback */
+/* load index.json only (no fallback list) */
 async function loadIndex(){
   const json = await fetchJson(ESSAYS_INDEX);
-  if(json && Array.isArray(json.items)){
+  if(json && Array.isArray(json.items) && json.items.length > 0){
     return json.items;
   }
-  // fallback
-  return FALLBACK_LIST;
+  return []; // empty — we won't fall back to embedded items
 }
 
-/* Render sidebar + list from essay metadata */
+/* render lists from index.json items */
 function renderLists(list){
   sidebarList.innerHTML = '';
   itemsOl.innerHTML = '';
+  if(!list || list.length === 0){
+    noEssaysMessage.classList.remove('hidden');
+    return;
+  }
+  noEssaysMessage.classList.add('hidden');
+
   list.forEach((item, idx) => {
     // sidebar link
     const liNav = document.createElement('li');
@@ -183,12 +180,9 @@ function renderLists(list){
     itemsOl.appendChild(li);
   });
 
-  // wire link clicks (delegated)
+  // wire links
   document.querySelectorAll('.openTitle, .navlink').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      // allow hashchange routing to handle preview/full
-      // prevent default? no — let hash change happen
-    });
+    a.addEventListener('click', ()=>{ /* let hash change handle UI */ });
   });
 
   // show first preview
@@ -196,7 +190,7 @@ function renderLists(list){
   if(first) renderPreview(first);
 }
 
-/* Render preview from a list element (li DOM) */
+/* preview */
 function renderPreview(li){
   const title = li.querySelector('.openTitle').textContent;
   const meta = li.querySelector('.meta').textContent;
@@ -204,16 +198,14 @@ function renderPreview(li){
   previewInner.innerHTML = `
     <h2>${title}</h2>
     <div class="meta">${meta} — <em>${li.dataset.date}</em></div>
-    <p style="margin-top:10px">Short summary: Replace this placeholder with the essay blurb or update the essay HTML file.</p>
+    <p style="margin-top:10px">Short summary: Replace this with a blurb in the essay file.</p>
     <div style="margin-top:10px"><strong>Annotation</strong><div class="annotation">${annotation}</div></div>
     <div class="actions">
       <button class="btn" id="openFullBtn">Open full</button>
       <button class="btn" id="copyCite">Copy citation</button>
     </div>
   `;
-  document.getElementById('openFullBtn').onclick = () => {
-    location.hash = 'full-' + li.dataset.id;
-  };
+  document.getElementById('openFullBtn').onclick = () => { location.hash = 'full-' + li.dataset.id; };
   document.getElementById('copyCite').onclick = () => {
     const cite = `${title}. ${meta} (${li.dataset.date})`;
     navigator.clipboard?.writeText(cite).then(()=> alert('Citation copied to clipboard.'));
@@ -221,47 +213,19 @@ function renderPreview(li){
   favPreviewBtn.textContent = (favorites.includes(li.dataset.id) ? '★ Favorited' : '☆ Favorite');
 }
 
-/* Hash routing */
+/* hash routing */
 async function handleHash(){
   const h = location.hash.replace('#','');
-  if(!h || h === 'index'){
-    fullView.style.display = 'none';
-    const firstLi = itemsOl.querySelector('.item');
-    if(firstLi) renderPreview(firstLi);
-    return;
-  }
-  if(h.startsWith('essay-')){
-    const id = h.replace('essay-','');
-    const li = itemsOl.querySelector(`.item[data-id="${id}"]`);
-    if(li) {
-      renderPreview(li);
-      fullView.style.display = 'none';
-    }
-    return;
-  }
-  if(h.startsWith('full-')){
-    const id = h.replace('full-','');
-    const li = itemsOl.querySelector(`.item[data-id="${id}"]`);
-    if(li){
-      renderPreview(li);
-      await showFullFromMeta(li.dataset.filename, li);
-    } else {
-      // try to find in sidebar links
-      alert('Essay not found in index.');
-    }
-    return;
-  }
-  if(h === 'favorites'){
-    showFavorites();
-    fullView.style.display = 'none';
-    return;
-  }
+  if(!h || h === 'index'){ fullView.style.display = 'none'; const first = itemsOl.querySelector('.item'); if(first) renderPreview(first); return; }
+  if(h.startsWith('essay-')){ const id = h.replace('essay-',''); const li = itemsOl.querySelector(`.item[data-id="${id}"]`); if(li){ renderPreview(li); fullView.style.display='none'; } return; }
+  if(h.startsWith('full-')){ const id = h.replace('full-',''); const li = itemsOl.querySelector(`.item[data-id="${id}"]`); if(li){ renderPreview(li); await showFullFromMeta(li.dataset.filename, li); } else { alert('Essay not found in index.json'); } return; }
+  if(h === 'favorites'){ showFavorites(); fullView.style.display='none'; return; }
 }
 
-/* Fetch and display an essay file (filename relative to ESSAYS_DIR) */
+/* load essay file */
 async function showFullFromMeta(filename, liElement){
   if(!filename){
-    fullInner.innerHTML = `<h1>Not configured</h1><p class="meta">This essay has no filename set in index.json.</p>`;
+    fullInner.innerHTML = `<h1>Not configured</h1><p class="meta">This essay has no filename configured in essays/index.json.</p>`;
     fullView.style.display = 'block';
     window.scrollTo({top:0,behavior:'smooth'});
     return;
@@ -271,7 +235,6 @@ async function showFullFromMeta(filename, liElement){
     const res = await fetch(url, {cache:'no-store'});
     if(!res.ok) throw new Error('Failed to load essay file.');
     const html = await res.text();
-    // sanitize minimal: we'll inject inside container — recommend authors keep essay HTML small and valid
     fullInner.innerHTML = html;
   } catch(e){
     fullInner.innerHTML = `<h1>Unable to load essay</h1><p class="meta">${escapeHtml(String(e.message))}</p>`;
@@ -280,115 +243,63 @@ async function showFullFromMeta(filename, liElement){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* Back to list */
-document.getElementById('backToList').addEventListener('click', ()=>{
-  location.hash = 'index';
-});
-
-/* Print */
+/* UI controls */
+document.getElementById('backToList').addEventListener('click', ()=> location.hash='index');
 document.getElementById('printBtn').addEventListener('click', ()=> {
   const html = `<!doctype html><html><head><meta charset="utf-8"><title>Print</title></head><body>${fullInner.innerHTML}</body></html>`;
-  const w = window.open('', '_blank');
-  w.document.write(html);
-  w.document.close();
-  w.print();
+  const w = window.open('', '_blank'); w.document.write(html); w.document.close(); w.print();
 });
-
-/* Download current full HTML */
-document.getElementById('downloadHtmlBtn').addEventListener('click', ()=>{
+document.getElementById('downloadHtmlBtn').addEventListener('click', ()=> {
   const blob = new Blob([fullInner.innerHTML], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'essay.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'essay.html'; a.click(); URL.revokeObjectURL(a.href);
 });
-
-/* Favorite toggle */
-favPreviewBtn.addEventListener('click', ()=>{
-  const h2 = previewInner.querySelector('h2');
-  if(!h2) return alert('Select an essay first.');
+favPreviewBtn.addEventListener('click', ()=> {
+  const h2 = previewInner.querySelector('h2'); if(!h2) return alert('Select an essay first.');
   const title = h2.textContent;
   const li = Array.from(itemsOl.querySelectorAll('.item')).find(it => it.querySelector('.openTitle').textContent === title);
   if(!li) return;
   const id = li.dataset.id;
-  if(favorites.includes(id)) favorites = favorites.filter(x => x !== id);
-  else favorites.push(id);
+  if(favorites.includes(id)) favorites = favorites.filter(x => x !== id); else favorites.push(id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
   renderPreview(li);
 });
-
-/* Show favorites */
 function showFavorites(){
-  if(favorites.length === 0){
-    previewInner.innerHTML = '<h2>Favorites</h2><p class="meta">No favorites yet. Use the ☆ Favorite button in the preview to add items.</p>';
-    return;
-  }
+  if(favorites.length === 0){ previewInner.innerHTML='<h2>Favorites</h2><p class="meta">No favorites yet.</p>'; return; }
   const favItems = Array.from(itemsOl.querySelectorAll('.item')).filter(it => favorites.includes(it.dataset.id));
   let html = '<h2>Favorites</h2><ol>';
-  favItems.forEach(it => {
-    const title = it.querySelector('.openTitle').textContent;
-    const meta = it.querySelector('.meta').textContent;
-    html += `<li><a href="#essay-${it.dataset.id}">${escapeHtml(title)}</a><div class="meta">${escapeHtml(meta)}</div></li>`;
-  });
-  html += '</ol>';
-  previewInner.innerHTML = html;
+  favItems.forEach(it => { const title = it.querySelector('.openTitle').textContent; const meta = it.querySelector('.meta').textContent; html += `<li><a href="#essay-${it.dataset.id}">${escapeHtml(title)}</a><div class="meta">${escapeHtml(meta)}</div></li>`; });
+  html += '</ol>'; previewInner.innerHTML = html;
 }
 
-/* Search/filter */
-document.getElementById('search').addEventListener('input', (e)=>{
+/* search / filters */
+document.getElementById('search').addEventListener('input', (e)=> {
   const q = e.target.value.trim().toLowerCase();
-  Array.from(itemsOl.querySelectorAll('.item')).forEach(li => {
-    li.style.display = (li.textContent.toLowerCase().includes(q)) ? '' : 'none';
-  });
+  Array.from(itemsOl.querySelectorAll('.item')).forEach(li => li.style.display = (li.textContent.toLowerCase().includes(q)) ? '' : 'none');
 });
-document.getElementById('clearSearch').addEventListener('click', ()=>{
-  document.getElementById('search').value = '';
-  Array.from(itemsOl.querySelectorAll('.item')).forEach(li => li.style.display = '');
-});
+document.getElementById('clearSearch').addEventListener('click', ()=> { document.getElementById('search').value = ''; Array.from(itemsOl.querySelectorAll('.item')).forEach(li => li.style.display = ''); });
+document.getElementById('toggleAnnotations').addEventListener('click', ()=> { Array.from(itemsOl.querySelectorAll('.item')).forEach(li => { const a = li.querySelector('.annotation'); if(a) a.classList.toggle('hidden'); }); });
+document.querySelectorAll('nav.sidebar button[data-filter]').forEach(btn=>{ btn.addEventListener('click', ()=> { const f = btn.dataset.filter; Array.from(itemsOl.querySelectorAll('.item')).forEach(li => { li.style.display = (f === 'all' || li.dataset.category === f) ? '' : 'none'; }); }); });
 
-/* Toggle annotations */
-document.getElementById('toggleAnnotations').addEventListener('click', ()=>{
-  Array.from(itemsOl.querySelectorAll('.item')).forEach(li => {
-    const a = li.querySelector('.annotation');
-    if(a) a.classList.toggle('hidden');
-  });
-});
-
-/* Quick filter buttons */
-document.querySelectorAll('nav.sidebar button[data-filter]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const f = btn.dataset.filter;
-    Array.from(itemsOl.querySelectorAll('.item')).forEach(li => {
-      li.style.display = (f === 'all' || li.dataset.category === f) ? '' : 'none';
-    });
-  });
-});
-
-/* Glossary modal */
+/* glossary */
 const glossModal = document.getElementById('glossModal');
 document.getElementById('openGloss').addEventListener('click', ()=> glossModal.style.display = 'flex');
 document.getElementById('closeGloss').addEventListener('click', ()=> glossModal.style.display = 'none');
-document.getElementById('glossSearch').addEventListener('input', (e)=>{
+document.getElementById('glossSearch').addEventListener('input', (e)=> {
   const q = e.target.value.trim().toLowerCase();
   document.querySelectorAll('#glossList li').forEach(li=> li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none');
 });
-
-/* Favorites link */
 document.getElementById('showFavLink').addEventListener('click', (e)=> { e.preventDefault(); location.hash = 'favorites'; });
 
-/* Utility: escape text for insertion into HTML (minimal) */
+/* helpers */
 function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s])); }
 
-/* Initialize app: load index and render */
+/* init: load index.json and render (no fallback) */
 (async function init(){
   const list = await loadIndex();
   renderLists(list);
-  // wire hash routing
   window.addEventListener('hashchange', handleHash);
-  if(!location.hash) {
-    const first = itemsOl.querySelector('.item');
-    if(first) renderPreview(first);
+  if(!location.hash){
+    const first = itemsOl.querySelector('.item'); if(first) renderPreview(first);
   } else {
     handleHash();
   }
