@@ -1,49 +1,69 @@
-/* retro-clean theme: soft Japanese palette + structured layout */
+/* Retro-clean stable layout - replacement CSS
+   Paste this entire file over your existing styles.css
+*/
+
 :root{
-  --bg:#e8f6f9;      /* soft cyan page background */
-  --panel:#fffefb;   /* paper-like panel */
-  --accent:#2e6b5a;  /* deep green */
-  --muted:#6b6b6b;
-  --soft:#c9e9df;    /* soft green box bg */
-  --soft2:#dff3f7;   /* soft blue box bg */
+  --bg:#e9f6f8;      /* page background - soft cyan */
+  --panel:#fffdfb;   /* content panel */
+  --accent:#2e6b5a;  /* deep green accent */
+  --muted:#616161;   /* secondary text */
+  --soft:#cfeee0;     /* soft green box */
+  --soft2:#e6f6fb;    /* soft blue box */
   --maxw:1040px;
-  --mono: "Noto Serif", Georgia, serif;
+  --serif: "Noto Serif", Georgia, "Times New Roman", serif;
 }
+
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
-  font-family:var(--mono);
+  font-family:var(--serif);
   background:var(--bg);
   color:#111;
-  line-height:1.65;
   -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+  -webkit-text-size-adjust:100%;
 }
+
+/* container - center the page */
 .container{
   max-width:var(--maxw);
   margin:18px auto;
   display:flex;
   gap:22px;
   padding:0 14px;
+  align-items:flex-start;
+  min-height:60vh;
 }
 
-/* Sidebar (left) */
+/* SIDEBAR */
 .sidebar{
   width:260px;
   background:var(--panel);
-  border:3px solid #bfe9d6;   /* soft green border */
-  padding:16px;
-  position:sticky;
-  top:18px;
-  height:calc(100vh - 36px);
-  overflow:auto;
-  box-shadow:0 4px 18px rgba(20,20,20,0.03);
+  border:2px solid #d8efe3;   /* thin soft border */
+  padding:14px;
+  position:relative;          /* NOTE: no sticky by default */
+  height:auto;
+  box-shadow:none;
+  overflow:visible;
 }
+@media (min-width:1100px){
+  /* keep a sticky sidebar but limited height for large screens */
+  .sidebar{
+    position:sticky;
+    top:18px;
+    max-height:calc(100vh - 40px);
+    overflow:auto;
+  }
+}
+
+/* content inside sidebar */
 .site-title{
   display:block;
   font-weight:700;
   color:var(--accent);
   text-decoration:none;
-  font-size:18px;
+  font-size:17px;
   margin-bottom:8px;
 }
 .sidebar .intro{
@@ -51,21 +71,19 @@ body{
   color:var(--muted);
   margin-bottom:12px;
 }
-
-/* nav sections */
 .nav-section{ margin:12px 0; }
 .nav-section h4{
   margin:0 0 8px;
   color:var(--accent);
   font-size:12px;
   letter-spacing:.06em;
-  background:linear-gradient(90deg, rgba(255,255,255,0.0), rgba(0,0,0,0.02));
   padding:6px;
   border-radius:4px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.0), rgba(0,0,0,0.01));
 }
 .sidebar a{
   display:block;
-  color:#0a4b3f;
+  color:#0b4b47;
   text-decoration:none;
   padding:6px 0;
   border-bottom:1px dashed #eef6f2;
@@ -73,26 +91,28 @@ body{
   font-size:14px;
 }
 
-/* Main content */
+/* MAIN content area */
 .main{
   flex:1;
   background:var(--panel);
-  border:2px solid #e6efe9;
-  padding:22px;
-  box-shadow:0 6px 26px rgba(18,18,18,0.03);
+  border:1px solid #e6efe9;
+  padding:20px;
+  box-shadow:none;
 }
+
+/* hero box */
 .hero{
   border-left:6px solid var(--soft);
-  padding:12px 16px;
+  padding:10px 14px;
   background:var(--soft2);
-  margin-bottom:18px;
+  margin-bottom:16px;
   border-radius:4px;
 }
 .hero h1{ margin:0; font-size:22px; color:#0b4b47; }
-.lead{ color:var(--muted); margin-top:6px; font-size:15px; }
+.lead{ color:var(--muted); margin-top:8px; font-size:15px; }
 
-/* list/grid */
-.list-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin-top:12px; }
+/* list grid */
+.list-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:12px; }
 .card{ background:#fff; padding:12px; border-left:4px solid var(--soft); }
 .card h3{ margin:0 0 6px; font-size:16px; color:#0b3a2e; }
 .card p{ margin:0; color:var(--muted); font-size:14px; }
@@ -108,9 +128,19 @@ body{
 /* footer */
 footer{ text-align:center; color:var(--muted); font-size:13px; margin:18px 0; }
 
-/* responsive */
+/* mobile & small screens */
 @media (max-width:900px){
-  .container{ flex-direction:column; padding:0 12px }
-  .sidebar{ width:auto; height:auto; position:relative; top:auto; margin-bottom:12px; }
+  .container{ flex-direction:column; padding:0 12px; }
+  .sidebar{ width:auto; position:relative; max-height:none; margin-bottom:12px; }
   .list-grid{ grid-template-columns:1fr; }
+  .hero{ padding:12px; }
+  .main{ padding:16px; }
 }
+
+/* optional small tweaks for very small phones */
+@media (max-width:420px){
+  .site-title{ font-size:16px; }
+  .hero h1{ font-size:18px; }
+  .card h3{ font-size:15px; }
+}
+
