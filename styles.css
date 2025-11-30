@@ -1,76 +1,85 @@
-/* Portal / Russell-like visual */
-:root{
-  --page-bg: #f7f6e8;   /* pale yellowish paper */
-  --box-bg: #fffefb;
-  --accent: #00a3a3;    /* teal-ish accent for headings */
-  --green: #c9f2d9;     /* left nav box */
-  --muted: #333;
-  --link: #0033cc;
-  --border: #2f9b77;
-  --max-width: 1060px;
-  --gap: 14px;
-  --font-s: 14px;
-}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Irfan — Essays & Papers</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar" role="navigation" aria-label="Main navigation">
+      <a class="site-title" href="index.html">Irfan Khan</a>
+      <div class="intro">Essays, papers, notes — philosophy, politics, psychology.</div>
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--page-bg);
-  color:var(--muted);
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size:var(--font-s);
-  line-height:1.35;
-}
+      <div class="nav-section">
+        <h4>PORTAL</h4>
+        <a href="index.html">Home</a>
+        <a href="#essays">Essays</a>
+        <a href="#papers">Papers</a>
+        <a href="about.html">About</a>
+      </div>
 
-/* top bar */
-.topbar{
-  padding:8px 12px;
-  border-bottom:3px solid #80c9c9;
-  background: linear-gradient(#f7f9f8, #f0f6f6);
-}
-.top-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-.brand{font-weight:700;color:#0b6a6a;text-decoration:none}
-.search{display:flex;gap:6px}
-.search input{padding:6px;border:1px solid #bfcfcf;border-radius:3px}
-.search button{padding:6px 8px;border-radius:3px;border:1px solid #bfcfcf;background:#e9f5f5}
+      <div class="nav-section">
+        <h4>ESSAYS</h4>
+        <a href="essays/essay-template.html">Modernity & Power</a>
+        <a href="essays/essay-template.html">Political Psychology</a>
+        <a href="essays/essay-template.html">AI & Society</a>
+      </div>
 
-/* layout */
-.layout{max-width:var(--max-width);margin:18px auto;display:grid;grid-template-columns:260px 1fr;gap:var(--gap);padding:0 12px}
-.left-col{align-self:start}
+      <div class="nav-section">
+        <h4>PAPERS (PDF)</h4>
+        <a href="papers/sample-paper.pdf" target="_blank">Sample Paper (PDF)</a>
+      </div>
 
-/* boxes */
-.box{background:var(--box-bg);padding:10px;border:4px solid transparent;margin-bottom:12px}
-.box h2, .box h3, .box h4{margin:4px 0 8px 0;font-weight:700}
-.box p{margin:0 0 8px 0;color:#444}
-.box.teal{border-color:#9fe0df;background:#dbf7f7}
-.box.green{border-color:#66b36b;background:var(--green)}
+      <div class="nav-section">
+        <h4>ABOUT</h4>
+        <a href="about.html">About this project</a>
+      </div>
 
-/* dense link lists like a portal */
-.dense{padding-left:8px;margin:6px 0 0 0}
-.dense li{list-style: none;margin:6px 0}
-.dense a{color:var(--link);text-decoration:underline;font-size:0.95rem}
+      <div style="margin-top:14px;color:#666;font-size:13px">Updated: <span id="updated">Nov 30, 2025</span></div>
+    </aside>
 
-/* main column styling (cluttered content feel) */
-.main-col .entry{border-top:1px dashed #e2e2e2;padding-top:10px;margin-top:10px}
-.excerpt{color:#444;font-size:0.95rem}
-.paper-list .dense a{font-weight:600;color:#0b6a6a}
+    <main class="main" role="main">
+      <section class="hero">
+        <h1>Essays & Papers — Portal</h1>
+        <div class="lead">A curated archive of essays and research. Read inline or download PDFs. Designed for quiet reading and easy navigation.</div>
+      </section>
 
-/* ad block look */
-.small-ad .ad{height:110px;border:2px solid #eee;background:#fff;padding:8px;color:#777;text-align:center;line-height:1.6}
+      <section id="essays">
+        <h2>Latest Essays</h2>
+        <div class="list-grid">
+          <article class="card">
+            <h3><a href="essays/essay-template.html">Modernity & Power</a></h3>
+            <p>An essay on modern institutions, power, and political psychology — short excerpt.</p>
+          </article>
 
-/* footer */
-.foot{max-width:var(--max-width);margin:0 auto;padding:10px 12px;color:#666;border-top:1px solid rgba(0,0,0,0.06)}
+          <article class="card">
+            <h3><a href="#">Political Psychology</a></h3>
+            <p>Notes on shame, influence, and public behavior.</p>
+          </article>
+        </div>
+      </section>
 
-/* mobile tweaks: keep the portal cramped and tall */
-@media (max-width:820px){
-  .layout{grid-template-columns:1fr;gap:10px;padding:0 10px}
-  .left-col{order:2}
-  .main-col{order:1}
-  .top-inner{flex-direction:column;align-items:flex-start;gap:8px}
-  .box{padding:10px}
-  .dense a{font-size:1rem}
-}
+      <section id="papers" style="margin-top:18px">
+        <h2>Featured Papers</h2>
+        <div class="list-grid">
+          <article class="card">
+            <h3>Sample Paper (PDF)</h3>
+            <p>A sample research paper. Download to read the full text.</p>
+            <a class="file-link" href="papers/sample-paper.pdf" target="_blank">Download PDF</a>
+          </article>
 
-/* intentionally small, many items, loud link color to mimic portal */
-a{color:var(--link)}
+          <article class="card">
+            <h3>Paper Two</h3>
+            <p>Short abstract of the second paper.</p>
+          </article>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>© Irfan Khan — Essays & Papers</footer>
+</body>
+</html>
