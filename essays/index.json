@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "id": "e1",
+      "title": "Stalin: A Historical and Dialectical Necessity Undone by Khrushchev",
+      "author": "Irfan",
+      "date": "2024-01-01",
+      "filename": "stalin.html",
+      "category": "essay",
+      "annotation": "Theoretical and historical analysis."
+    },
+    {
+      "id": "e2",
+      "title": "An Enquiry Concerning Israel, Liberal Democracy and Karl Marx",
+      "author": "Irfan",
+      "date": "2024-01-02",
+      "filename": "israel-marx.html",
+      "category": "essay",
+      "annotation": "Geopolitical critique."
+    },
+    {
+      "id": "e3",
+      "title": "On China",
+      "author": "Irfan",
+      "date": "2024-01-03",
+      "filename": "on-china.html",
+      "category": "essay",
+      "annotation": "Strategic and political study."
+    },
+    {
+      "id": "e4",
+      "title": "Ecological Motion of Capitalism",
+      "author": "Irfan",
+      "date": "2024-01-04",
+      "filename": "ecological-capitalism.html",
+      "category": "essay",
+      "annotation": "Ecological critique."
+    },
+    {
+      "id": "e5",
+      "title": "The Illiberal Nature of Democracy",
+      "author": "Irfan",
+      "date": "2024-01-05",
+      "filename": "illiberal-democracy.html",
+      "category": "essay",
+      "annotation": "Political theory."
+    }
+  ]
+}
